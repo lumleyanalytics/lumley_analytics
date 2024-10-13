@@ -1,0 +1,116 @@
+version: 2
+
+sources:
+  - name: chatt_police
+    database: lumley-analytics
+    schema: chatt_police
+    tables:
+      - name: police_incidents
+        description: > 
+          ### police_incidents
+
+          This table contains data on police incidents reported in Chattanooga, Tennessee. The dataset is sourced from [Chattanooga Open Data Portal](https://www.chattadata.org/Public-Safety/Police-Incidents/jvkg-79ss) and includes detailed information about incidents involving police officers.
+
+          #### Key Insights:
+
+          This table can be used to analyze trends in public safety, including patterns in crime locations, types of offenses, and the volume of incidents over time. It may be particularly useful for visualizing geographic crime data or identifying areas with a high frequency of police incidents.
+
+        columns:
+          - name: etl_load_time
+            description: The timestamp this record was added to the table.
+          - name: case_status
+            description: "The current status of the case (e.g., open, closed, under investigation)."
+          - name: case_status_description
+            description: "A more detailed description of the case status."
+          - name: latitude
+            description: "The geographical latitude of the incident location."
+          - name: longitude
+            description: "The geographical longitude of the incident location."
+          - name: location
+            description: "A combined field showing both latitude and longitude coordinates."
+          - name: citydst
+            description: "The city district where the incident occurred."
+          - name: neighborhood
+            description: "The neighborhood where the incident took place."
+          - name: address
+            description: "The street address where the incident occurred."
+          - name: city
+            description: "The city where the incident occurred (typically Chattanooga)."
+          - name: state
+            description: "The state where the incident occurred (typically Tennessee)."
+          - name: zip
+            description: "The postal code of the incident location."
+          - name: date_incident
+            description: "The date when the incident occurred."
+          - name: jurisdiction
+            description: "The legal or geographic area where the incident was reported, indicating the responsible law enforcement entity."
+          - name: incident_tract
+            description: "The census tract where the incident occurred, used for demographic analysis."
+          - name: zone
+            description: "The police zone where the incident took place."
+          - name: ucr_incident_code
+            description: "The Uniform Crime Reporting (UCR) code associated with the type of incident."
+          - name: incident_description
+            description: "A brief description of the offense or event that led to the police involvement."
+          - name: incident_type
+            description: "The type of incident (e.g., property crime, violent crime, traffic-related)."
+          - name: case_number
+            description: "A unique identifier for the case or incident."
+
+
+models:
+  - name: base_chatt_police_police_incidents
+    description: >
+       ### police_incidents
+
+       This is a clean view of a table that contains data on police incidents reported in Chattanooga, Tennessee. The dataset is sourced from [Chattanooga Open Data Portal](https://www.chattadata.org/Public-Safety/Police-Incidents/jvkg-79ss) and includes detailed information about incidents involving police officers.
+
+       #### Key Insights:
+
+       This table can be used to analyze trends in public safety, including patterns in crime locations, types of offenses, and the volume of incidents over time. It may be particularly useful for visualizing geographic crime data or identifying areas with a high frequency of police incidents.
+
+    data_tests:
+          - dbt_utils.unique_combination_of_columns:
+              combination_of_columns:
+                - case_number
+                - incident_description
+                - latitude
+                - longitude
+                - ucr_incident_code
+    columns:
+          - name: case_status
+            description: "The current status of the case (e.g., open, closed, under investigation)."
+          - name: case_status_description
+            description: "A more detailed description of the case status."
+          - name: latitude
+            description: "The geographical latitude of the incident location."
+          - name: longitude
+            description: "The geographical longitude of the incident location."
+          - name: citydst
+            description: "The city district where the incident occurred."
+          - name: neighborhood
+            description: "The neighborhood where the incident took place."
+          - name: address
+            description: "The street address where the incident occurred."
+          - name: city
+            description: "The city where the incident occurred (typically Chattanooga)."
+          - name: state
+            description: "The state where the incident occurred (typically Tennessee)."
+          - name: zip
+            description: "The postal code of the incident location."
+          - name: date_incident
+            description: "The date when the incident occurred."
+          - name: jurisdiction
+            description: "The legal or geographic area where the incident was reported, indicating the responsible law enforcement entity."
+          - name: incident_tract
+            description: "The census tract where the incident occurred, used for demographic analysis."
+          - name: zone
+            description: "The police zone where the incident took place."
+          - name: ucr_incident_code
+            description: "The Uniform Crime Reporting (UCR) code associated with the type of incident."
+          - name: incident_description
+            description: "A brief description of the offense or event that led to the police involvement."
+          - name: incident_type
+            description: "The type of incident (e.g., property crime, violent crime, traffic-related)."
+          - name: case_number
+            description: "A unique identifier for the case or incident."
