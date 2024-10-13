@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: fct_chatt_police_police_incidents_dashboard
+    description: "This model is designed for the Chattanooga, Tennessee Police Incidents Dashboard. It provides a clean, summarized view of police incidents in Chattanooga, including key information such as the address, case number, date, description, and geolocation of incidents."
+    columns:
+      - name: address
+        description: "The address where the incident occurred."
+      
+      - name: case_number
+        description: "A unique identifier for the police incident."
+
+      - name: date_incident
+        description: "The date and time when the incident occurred."
+
+      - name: incident_description
+        description: "A brief description of the incident type."
+
+      - name: latitude
+        description: "The latitude coordinate of the incident location."
+
+      - name: longitude
+        description: "The longitude coordinate of the incident location."
+
+      - name: zip
+        description: "The zip code where the incident took place."
+
+exposures:
+
+  - name: chattanooga_tn_police_incidents_dashboard
+    label: Chattanooga, Tennessee Police Incidents Dashboard
+    type: dashboard
+    maturity: medium
+    url: https://lookerstudio.google.com/reporting/8eabb79c-9b32-4fb9-a68d-66a1b53127b7
+    description: >
+      
+      This dashboard aims to analyze police incidents in the City of Chattanooga, Tennessee. Data is ingested directly from [Chattanooga Open Data Portal](https://www.chattadata.org/Public-Safety/Police-Incidents/jvkg-79ss).
+
+      ### Disclaimer:
+      The data provided in this public portal/website represents general data of incidents based on the Tennessee Incident Based Reporting System (TIBRS). Incidents involving protected classes (juveniles, domestic abuse victims) by Tennessee law have been removed. Additionally, some incident addresses have been generalized to block level and randomly offset to protect the privacy of victims of crime. All crime data posted is preliminary and may or may not have been reviewed and approved by the Chattanooga Police Department’s (CPD) quality control process; therefore, the data may change upon further investigation.
+
+      The City of Chattanooga and the Chattanooga Police Department caution against using crime data provided in this public portal to make decisions regarding the safety of, amount of or type of crime occurring in a particular area. Users should not make decisions as it relates to safety solely based on the data provided on this website, but should seek independent verification directly through CPD’s Crime Analyst Unit.
+
+      The information in this portal is provided strictly as a courtesy to the public.
+
+    depends_on:
+      - ref('fct_chatt_police_police_incidents_dashboard')
+
+    owner:
+      name: Brad Lumley
+      email: bradmlumley@gmail.com
