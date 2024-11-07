@@ -1,0 +1,135 @@
+version: 2
+
+sources:
+  - name: chatt_311_service_requests
+    database: lumley-analytics
+    schema: chatt_311_service_requests
+    tables:
+      - name: src_chattadata_311_service_requests
+        description: >
+          Raw data dump of the 311 service requests data at chattadata.org. This
+          table is fully refreshed every night at midnight by Cloud Run Job
+          [el-chattadata-311-service-requests-job](https://console.cloud.google.com/run/jobs/details/us-east4/el-chattadata-311-service-requests-job/executions?project=lumley-analytics)
+          .
+        columns:
+          - name: service_request_key
+            description: "Unique identifier of the service request in the Accela system."
+
+          - name: created_date
+            description: "Date the service request was created."
+
+          - name: due_at
+            description: "Date the request is due."
+
+          - name: completed_at
+            description: "Date the request is completed."
+
+          - name: on_time_indicator
+            description: "Indicator if the request is completed at or before the due date."
+            data_tests:
+              - accepted_values:
+                  values: ["Yes", "No", "N/A"]
+
+          - name: department
+            description: "Department the service request is routed to."
+
+          - name: request_type
+            description: "The type of the service request created."
+
+          - name: description
+            description: "Description of the service request often populated by the constituent submitting the request."
+
+          - name: request_type_code
+            description: "Urgency of the request (e.g., Urgent, Emergency, Standard, None)."
+
+          - name: status_code
+            description: "Status of the request, such as Open, New, or Closed."
+
+          - name: intake_form
+            description: "How the request was submitted."
+
+          - name: actual_days_to_complete_working
+            description: "Actual number of working days taken to complete the request."
+
+          - name: sla_fy_2019
+            description: "SLA (Service Level Agreement) for the fiscal year 2019."
+
+          - name: ispublic
+            description: "Indicates if the service request is public."
+            data_tests:
+              - accepted_values:
+                  values: ["yes", "no"]
+
+          - name: citydst
+            description: "Council district in which the request was submitted."
+
+          - name: transmit_timestamp
+            description: "Timestamp of when this record was transmitted from the API to BigQuery."
+
+models:
+  - name: base_src_chattadata_311_service_requests
+    config:
+      location: US
+    description: > 
+      This model processes and casts service request data fields from 
+      src_chattadata_311_service_requests to appropriate data types from the original source data.
+    columns:
+      - name: service_request_key
+        description: "Unique identifier of the service request in the Accela system."
+        data_tests:
+          - unique
+
+      - name: created_date
+        description: "Date the service request was created."
+
+      - name: due_at
+        description: "Date the request is due."
+
+      - name: completed_at
+        description: "Date the request is completed."
+
+      - name: on_time_indicator
+        description: "Indicator if the request is completed at or before the due date."
+        data_tests:
+              - accepted_values:
+                  values: ["Yes", "No", "N/A"]
+
+      - name: department
+        description: "Department the service request is routed to."
+
+      - name: request_type
+        description: "The type of the service request created."
+
+      - name: description
+        description: "Description of the service request often populated by the constituent submitting the request."
+
+      - name: request_type_code
+        description: "Urgency of the request (e.g., Urgent, Emergency, Standard, None)."
+
+      - name: status_code
+        description: "Status of the request, such as Open, New, or Closed."
+
+      - name: intake_form
+        description: "How the request was submitted."
+
+      - name: actual_days_to_complete_working
+        description: "Actual number of working days taken to complete the request."
+
+      - name: sla_fy_2019
+        description: "SLA (Service Level Agreement) for the fiscal year 2019."
+
+      - name: ispublic
+        description: "Indicates if the service request is public."
+        data_tests:
+              - accepted_values:
+                  values: ["yes", "no"]
+
+      - name: citydst
+        description: "Council district in which the request was submitted."
+
+      - name: publiclocation
+        description: "Geographic location associated with the public request."
+
+      - name: transmit_timestamp
+        description: "Timestamp indicating when the data was transmitted."
+
