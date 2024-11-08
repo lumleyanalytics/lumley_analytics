@@ -14,31 +14,14 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
-      - name: Set up Google Cloud Authentication
-        env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-        run: |
-          echo "$GCP_SA_KEY" | base64 -d > /tmp/gha-creds.json
-          gcloud auth activate-service-account --key-file=/tmp/gha-creds.json
-          gcloud config set project lumley-analytics
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Verify Authentication
-        run: |
-          gcloud auth list
-          gcloud config list
-
-      - name: Debug Artifact Registry Permissions
-        run: |
-          gcloud artifacts repositories list --location=us-east4  # Corrected command
-
-      - name: Reconfigure Docker Auth for Artifact Registry
+      - name: Configure Docker to Use Artifact Registry
         run: |
           gcloud auth configure-docker us-east4-docker.pkg.dev
-          cat ~/.docker/config.json  # Confirm Docker is configured for Artifact Registry
-
-      - name: Test Docker Pull from Artifact Registry (Debugging)
-        run: |
-          docker pull us-east4-docker.pkg.dev/lumley-analytics/lumley-analytics-dbt/nonexistent-image || echo "Expected error due to nonexistent image"
 
       - name: Create Service Account Key File for Docker
         env:
@@ -56,3 +39,13 @@ jobs:
         run: |
           docker build -t us-east4-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/lumley-analytics-dbt-snapshot .
           docker push us-east4-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/lumley-analytics-dbt-snapshot
+
+      - name: Deploy Cloud Run Job
+        env:
+          PROJECT_ID: "lumley-analytics"
+          REGION: "us-east4"
+          REPO_NAME: "lumley-analytics-dbt"
+        run: |
+          gcloud run jobs update dbt-snapshot-job \
+            --image us-east4-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/lumley-analytics-dbt-snapshot \
+            --region $REGION
