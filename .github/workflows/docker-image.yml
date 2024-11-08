@@ -40,6 +40,6 @@ jobs:
           REGION: "us-east4"  # Ensure this matches your Artifact Registry and Cloud Run region
           REPO_NAME: "lumley-analytics-dbt"
         run: |
-          gcloud run jobs update dbt-snapshot-job \
+          gcloud run jobs update lumley-analytics-dbt \
             --image us-east4-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/lumley-analytics-dbt-snapshot \
             --region $REGION
