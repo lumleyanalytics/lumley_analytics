@@ -7,11 +7,11 @@ lumley-analytics:
       project: lumley-analytics
       dataset: dbt_dev
       threads: 4 # Must be a value of 1 or greater
-      keyfile: lumley-analytics-9aabdf12ee21.json
+      keyfile: /lumley-analytics-9aabdf12ee21.json
     prod:
       type: bigquery
       method: service-account
       project: lumley-analytics
       dataset: dbt_prod
       threads: 4 # Must be a value of 1 or greater
-      keyfile: lumley-analytics-9aabdf12ee21.json
+      keyfile: /lumley-analytics-9aabdf12ee21.json
