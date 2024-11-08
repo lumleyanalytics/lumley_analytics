@@ -15,5 +15,8 @@ WORKDIR /
 # Copy all files from the root of the repository into the container
 COPY . .
 
+# Install dbt dependencies specified in packages.yml
+RUN dbt deps
+
 # Default command to run dbt snapshot
 CMD ["dbt", "snapshot"]
