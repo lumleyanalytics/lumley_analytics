@@ -29,7 +29,7 @@ jobs:
 
       - name: Debug Artifact Registry Permissions
         run: |
-          gcloud artifact-registry repositories list --location=us-east4
+          gcloud artifacts repositories list --location=us-east4  # Corrected command
 
       - name: Reconfigure Docker Auth for Artifact Registry
         run: |
