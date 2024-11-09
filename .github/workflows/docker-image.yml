@@ -35,7 +35,7 @@ jobs:
       - name: Build and Push Docker Image
         env:
           PROJECT_ID: "lumley-analytics"
-          REPO_NAME: "lumley-analytics-dbt-snapshot"
+          REPO_NAME: "lumley-analytics-dbt"
         run: |
           docker build -t us-east4-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/lumley-analytics-dbt-snapshot .
           docker push us-east4-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/lumley-analytics-dbt-snapshot
@@ -44,7 +44,7 @@ jobs:
         env:
           PROJECT_ID: "lumley-analytics"
           REGION: "us-east4"
-          REPO_NAME: "lumley-analytics-dbt-snapshot"
+          REPO_NAME: "lumley-analytics-dbt"
         run: |
           gcloud run jobs update lumley-analytics-dbt-snapshot \
             --image us-east4-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/lumley-analytics-dbt-snapshot \
