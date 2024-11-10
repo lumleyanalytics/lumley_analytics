@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+        with:
+          persist-credentials: false  # Disable automatic token usage
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -41,16 +43,18 @@ jobs:
           source env/bin/activate
           dbt docs generate
 
-      - name: Publish to gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Configure Git for GitHub Pages Push
         run: |
-          # Initialize a new repo in the target folder and push to gh-pages
           cd target
           git init
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
           git commit -m "Update dbt docs"
-          git branch -M gh-pages
-          git push --force --quiet "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
+          # Set up remote URL with token-based authentication
+          git remote add origin "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+
+      - name: Push to gh-pages
+        run: |
+          git push --force origin master:gh-pages
+        working-directory: ./target
