@@ -22,7 +22,7 @@ jobs:
         run: |
           python -m venv env
           source env/bin/activate
-          pip install dbt-core dbt-bigquery  # Adjust adapter as needed
+          pip install dbt-core dbt-bigquery  # Add any other necessary dbt adapters
 
       - name: Set up Google Cloud Credentials
         env:
@@ -43,11 +43,14 @@ jobs:
 
       - name: Publish to gh-pages
         run: |
-          # Initialize a new repo in the target folder and push to gh-pages
+          # Create a new repo in the target directory and push to gh-pages
           cd target
           git init
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
           git commit -m "Update dbt docs"
-          git push --force --quiet "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master:gh-pages
+          # Push to the gh-pages branch
+          git push --force --quiet "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
