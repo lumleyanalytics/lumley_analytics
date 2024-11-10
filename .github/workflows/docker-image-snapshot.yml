@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'snapshots/**'  # Only trigger if there are changes in the snapshots folder
   workflow_dispatch:
 
 jobs:
