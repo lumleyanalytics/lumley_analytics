@@ -20,6 +20,13 @@ jobs:
         with:
           python-version: '3.9'  # Adjust as necessary
 
+      - name: Set up Google Cloud Credentials
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: |
+          echo "$GCP_SA_KEY" | base64 --decode > lumley-analytics-sa.json
+          export GOOGLE_APPLICATION_CREDENTIALS=$PWD/lumley-analytics-sa.json
+
       - name: Install dbt and dependencies
         run: |
           python -m venv env
@@ -32,6 +39,8 @@ jobs:
           dbt deps  # Install dependencies from packages.yml
 
       - name: Run dbt Build (Prod)
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/lumley-analytics-sa.json
         run: |
           source env/bin/activate
           dbt build --target prod  # Run models with the prod target
