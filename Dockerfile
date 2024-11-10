@@ -19,4 +19,4 @@ COPY . .
 RUN dbt deps
 
 # Default command to run dbt snapshot
-CMD ["dbt", "snapshot"]
+CMD ["dbt", "snapshot", "--target prod"]

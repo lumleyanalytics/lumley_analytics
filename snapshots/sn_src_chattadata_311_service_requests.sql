@@ -21,8 +21,7 @@
             'ispublic',
             'citydst',
             'publiclocation'
-        ],
-        updated_at='transmit_timestamp',     
+        ],    
         invalidate_hard_deletes=True         
     )
 }}
