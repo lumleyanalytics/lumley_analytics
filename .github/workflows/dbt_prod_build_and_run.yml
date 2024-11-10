@@ -1,0 +1,32 @@
+name: Run dbt Build on PR Merge to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  dbt-prod-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for branches
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # Adjust as necessary
+
+      - name: Install dbt and dependencies
+        run: |
+          python -m venv env
+          source env/bin/activate
+          pip install dbt-core dbt-bigquery  # Add other adapters as needed
+
+      - name: Run dbt Build (Prod)
+        run: |
+          source env/bin/activate
+          dbt build --target prod  # Run models with the prod target
