@@ -24,8 +24,8 @@ jobs:
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
         run: |
-          echo "$GCP_SA_KEY" | base64 --decode > lumley-analytics-sa.json
-          export GOOGLE_APPLICATION_CREDENTIALS=$PWD/lumley-analytics-sa.json
+          echo "$GCP_SA_KEY" | base64 --decode > lumley-analytics-9aabdf12ee21.json
+          export GOOGLE_APPLICATION_CREDENTIALS=$PWD/lumley-analytics-9aabdf12ee21.json
 
       - name: Install dbt and dependencies
         run: |
@@ -40,7 +40,7 @@ jobs:
 
       - name: Run dbt Build (Prod)
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/lumley-analytics-sa.json
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/lumley-analytics-9aabdf12ee21.json
         run: |
           source env/bin/activate
           dbt build --target prod  # Run models with the prod target
