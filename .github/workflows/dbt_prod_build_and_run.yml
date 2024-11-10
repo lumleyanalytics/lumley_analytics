@@ -1,4 +1,4 @@
-name: Run dbt Build on PR Merge to Main
+name: Run dbt Build and Publish Docs on PR Merge to Main
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  dbt-prod-build:
+  dbt-prod-build-and-publish-docs:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'  # Adjust as necessary
+          python-version: '3.9'
 
       - name: Set up Google Cloud Credentials
         env:
@@ -38,9 +38,24 @@ jobs:
           source env/bin/activate
           dbt deps  # Install dependencies from packages.yml
 
-      - name: Run dbt Build (Prod)
+      - name: Run dbt Build and Generate Docs
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/lumley-analytics-9aabdf12ee21.json
         run: |
           source env/bin/activate
           dbt build --target prod  # Run models with the prod target
+          dbt docs generate  # Generate documentation after the build
+
+      - name: Publish to gh-pages
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          cd target
+          git init
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update dbt docs"
+          # Push to the gh-pages branch using the GH_PAT token
+          git remote add origin "https://${{ secrets.GH_PAT }}@github.com/lumleyanalytics/lumley_analytics.git"
+          git push --force origin master:gh-pages
