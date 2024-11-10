@@ -43,7 +43,9 @@ jobs:
           source env/bin/activate
           dbt docs generate
 
-      - name: Configure Git for GitHub Pages Push
+      - name: Configure Git and Push to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd target
           git init
@@ -51,10 +53,5 @@ jobs:
           git config user.email "actions@github.com"
           git add .
           git commit -m "Update dbt docs"
-          # Set up remote URL with token-based authentication
-          git remote add origin "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
-
-      - name: Push to gh-pages
-        run: |
-          git push --force origin master:gh-pages
-        working-directory: ./target
+          # Use GitHub token to push to gh-pages branch
+          git push --force "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:gh-pages
